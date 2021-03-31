@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Promotions{% endblock %}
+
+{% block body %}
+    <h1>Create new Promotions</h1>
+
+    <select id="promotions_pros" name="promotions[pros]">
+        {% for product in products %}
+        <option value="{{ product.id }}">{{ product.nom }}</option>
+        {% endfor %}
+    </select>
+
+    {{ include('promotions/_form.html.twig') }}
+
+
+
+    <a href="{{ path('promotions_index') }}">back to list</a>
+{% endblock %}
+
+
+
+
+
+

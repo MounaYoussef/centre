@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pro index{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-8">
+    <h1>Pro index</h1>
+        </div>
+    <div class="col-md-4">
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+
+    </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody class="prod">
+        {% for pro in pros %}
+            <tr>
+                <td>{{ pro.id }}</td>
+                <td>{{ pro.nom }}</td>
+                <td>{{ pro.prix }}</td>
+                <td>
+                    <a href="{{ path('pro_show', {'id': pro.id}) }}">show</a>
+                    <a href="{{ path('pro_edit', {'id': pro.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('pro_new') }}">Create new</a>
+
+    <script>
+        url_product_search = Routing.generate('pro_search');
+
+        $(document).ready(function () {
+            $('#myInput').on('keyup', function(){
+                $('.prod').empty()
+                var text = $(this).val()
+
+                $.ajax({
+                    url: url_product_search,
+                    type: "POST",
+                    data: {text: text},
+                    cache: false,
+                    success: function (data) {
+                        for(i = 0; i < data.search.length; i++){
+                            $('.prod').append(' <tr>\n' +
+                                '                <td>'+data.search[i].id+'</td>\n' +
+                                '                <td>'+data.search[i].nom+'</td>\n' +
+                                '                <td>'+data.search[i].prix+'</td>\n' +
+                                '                <td>\n' +
+                                '                    <a href="'+'http://localhost:8000/pro/'+data.search[i].id+'">show</a>\n' +
+                                '                    <a href="'+'http://localhost:8000/pro/'+data.search[i].id+'/edit'+'">edit</a>\n' +
+                                '                </td>\n' +
+                                '            </tr>')
+
+                        }
+
+
+
+                    },
+                    error: function () {
+                        alert('something wrong')
+                    }
+                })
+            })
+
+
+        })
+
+    </script>
+{% endblock %}
+
+
